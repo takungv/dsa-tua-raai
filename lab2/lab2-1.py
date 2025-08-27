@@ -56,7 +56,7 @@ def is_balanced(s: str) -> bool:
 
 
 # === ตัวอย่างการใช้งานกับไฟล์เดียว ===
-filename = "lab2/testcase2-1/test2.py"  # เปลี่ยนชื่อไฟล์ตามต้องการ
+filename = "lab2/testcase2-1/test10.py"  # เปลี่ยนชื่อไฟล์ตามต้องการ
 #lab2/testcase2-1/test4.py
 if not os.path.isfile(filename):
     print(f"File '{filename}' not found.")

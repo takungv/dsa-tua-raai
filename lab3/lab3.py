@@ -8,11 +8,12 @@ class Node:
 
 # ความสำคัญของ operator
 def precedence(op):
-    if op in ('+', '-'):
+    if op in ('+', '-', '–', '—'):   # รองรับทุกแบบของ minus
         return 1
     if op in ('*', '/'):
         return 2
     return 0
+
 
 # สร้าง Binary Expression Tree
 def construct_tree(expr):
@@ -101,12 +102,15 @@ def evaluate_postorder(postfix):
         else:
             b = stack.pop()
             a = stack.pop()
-            if token == '+': stack.append(a + b)
-            elif token == '-': stack.append(a - b)
-            elif token == '*': stack.append(a * b)
-            elif token == '/': stack.append(a / b)
+            if token in ('+',):
+                stack.append(a + b)
+            elif token in ('-', '–', '—'):   # รองรับลบทุกแบบ
+                stack.append(a - b)
+            elif token == '*':
+                stack.append(a * b)
+            elif token == '/':
+                stack.append(a / b)
     return stack[0]
-
 # ========== ทดลองกับไฟล์ ==========
 filename = os.path.join("lab3/testcase3", "test3.txt")
 
