@@ -6,39 +6,41 @@ class Node:
         self.left = None
         self.right = None
 
-def precedence(op):
-    if op in ('+', '-', '–', '—'):   # รองรับทุกแบบของ minus
+def priority_ops(op):
+    if op in ('+','-'):
         return 1
-    if op in ('*', '/'):
+    elif op in ('*', '/'):
         return 2
     return 0
 
-# สร้าง Binary Expression Tree
+#init tree
 def construct_tree(expr):
     values = []
     ops = []
     i = 0
-    
+
     while i < len(expr):
-        # skip space
+
+        #skip space
         if expr[i] == ' ':
             i += 1
-            continue 
+            continue
 
-        # operand converter
+
+        #int convert
         if expr[i].isdigit():
             val = 0
             while i < len(expr) and expr[i].isdigit():
-                val = val * 10 + int(expr[i])
+                val = val*10 + int(expr[i])
                 i += 1
             values.append(Node(val))
             continue
-        
-        # (
+
+        #(
         elif expr[i] == '(':
             ops.append(expr[i])
 
-        # )
+        #)
         elif expr[i] == ')':
             while ops and ops[-1] != '(':
                 op = ops.pop()
@@ -47,12 +49,13 @@ def construct_tree(expr):
                 node = Node(op)
                 node.left = left
                 node.right = right
-                values.append(node)
-            ops.pop() # ลบ '('
 
-        # operator
+                values.append(node)
+            ops.pop() #remove '('
+
+        #operand
         else:
-            while ops and (precedence(ops[-1]) >= precedence(expr[i])):
+            while ops and (priority_ops(ops[-1]) >= priority_ops(expr[i])):
                 op = ops.pop()
                 right = values.pop()
                 left = values.pop()
@@ -62,8 +65,7 @@ def construct_tree(expr):
                 values.append(node)
             ops.append(expr[i])
         i += 1
-
-    # สร้าง node จาก operator ที่เหลือ
+    
     while ops:
         op = ops.pop()
         right = values.pop()
@@ -73,9 +75,10 @@ def construct_tree(expr):
         node.right = right
         values.append(node)
 
-    return values[-1] # root of tree
+    return values[-1]
 
-# ---------- ข้อ 1: Traversal ----------
+
+#-----Travaersal-----
 def inorder(root):
     if root:
         return inorder(root.left) + [str(root.value)] + inorder(root.right)
@@ -90,26 +93,8 @@ def postorder(root):
     if root:
         return postorder(root.left) + postorder(root.right) + [str(root.value)]
     return []
+#----------
 
-# ---------- ข้อ 2: Evaluate จาก Postorder ----------
-def evaluate_postorder(postfix):
-    stack = []
-    for token in postfix:
-        if token.isdigit():
-            stack.append(int(token))
-        else:
-            b = stack.pop()
-            a = stack.pop()
-            if token in ('+',):
-                stack.append(a + b)
-            elif token in ('-', '–', '—'):   # รองรับลบทุกแบบ
-                stack.append(a - b)
-            elif token == '*':
-                stack.append(a * b)
-            elif token == '/':
-                stack.append(a / b)
-    return stack[0]
-# ========== ทดลองกับไฟล์ ==========
 filename = os.path.join("lab3/testcase3", "Lab_3 example.txt")
 
 if not os.path.isfile(filename):
@@ -125,19 +110,16 @@ else:
             try:
                 tree = construct_tree(expr)
 
-                # ข้อ 1: Traversal
                 inord = inorder(tree)
                 preord = preorder(tree)
                 postord = postorder(tree)
 
-                print(f"Expression: {expr}")
-                print(" Inorder  :", " ".join(inord))
-                print(" Preorder :", " ".join(preord))
-                print(" Postorder:", " ".join(postord))
+                print(" -------------------------------")
+                print(" Inorder :"," ".join(inord))
+                print(" Preorder :"," ".join(preord))
+                print(" Postorder :", " ".join(postord))
+                print(" -------------------------------")
 
-                # ข้อ 2: Evaluate (ใช้ Postorder)
-                result = evaluate_postorder(postord)
-                print(" Result   :", result)
-                print()
+
             except Exception as e:
-                print(f"Error evaluating '{expr}': {e}")
+                print(f"Error evaluating '{expr}' : {e}")
