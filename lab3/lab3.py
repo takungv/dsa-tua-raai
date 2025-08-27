@@ -110,7 +110,7 @@ def evaluate_postorder(postfix):
                 stack.append(a / b)
     return stack[0]
 # ========== ทดลองกับไฟล์ ==========
-filename = os.path.join("lab3/testcase3", "Lab_3 example.txt")
+filename = os.path.join("lab3/testcase3", "test3.txt")
 
 if not os.path.isfile(filename):
     print(f"File '{filename}' not found.")
