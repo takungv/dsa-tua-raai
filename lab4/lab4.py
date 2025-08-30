@@ -1,6 +1,10 @@
+import os
 
 #Brute Force
 def brute_force(num_of_line, info):
+    print("Days :",num_of_line)
+    print("======================================================================================================================")
+    print()
     max_profit = 0
     buy_day = sell_day = 0
     buy_rate = sell_rate = 0.0
@@ -20,7 +24,9 @@ def brute_force(num_of_line, info):
 
 #divide_conquer
 def divide_conquer(num_of_line, rate):
-
+    print("Days :",num_of_line)
+    print("======================================================================================================================")
+    print()
     def solve(price, left, right):
         if left == right :
             return (left, right, 0, price[left], price[right])
@@ -45,9 +51,16 @@ def divide_conquer(num_of_line, rate):
 
     return [buy_idx+1, buy_rate, sell_idx+1, sell_rate, profit, holding_day]
                    
+def read_file(filepath):
+    with open(filepath, "r") as f:
+        lines = f.readlines()
+        num_of_days = int(lines[0].strip())
+        rates = list(map(float, lines[1].strip().split()))
+    return num_of_days, rates
 
-rates = [35.10,35.01,35.11,35.02,35.08,35.03,35.09,35.12,35.04,35.17,
-         35.14,35.19,35.13,35.07,35.16,35.20,35.06,35.05,35.18,35.16]
+filename = os.path.join("lab4/testcase", "4.6 extra.txt")
+num_of_days, rates = read_file(filename)
 
-#brute_force(20, rates)
-print(divide_conquer(20, rates))
+os.system("clear")
+#print(brute_force(num_of_days, rates))
+print(divide_conquer(num_of_days, rates))
