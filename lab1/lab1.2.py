@@ -15,24 +15,24 @@ def sieve(limit):
     return primes
 
 
-def prime_factors_sieve(x):
-    """หาตัวประกอบเฉพาะของ x โดยใช้ sieve()"""
+def prime_factors_sieve(x, primes):
+    """หาตัวประกอบเฉพาะของ x โดยใช้ primes ที่เตรียมไว้"""
     factors = []
-    primes = sieve(int(x**0.5))  # เรียกใช้ sieve เพื่อได้ prime ≤ √x
-
     for p in primes:
+        if p * p > x:
+            break
         while x % p == 0:
             factors.append(p)
             x //= p
-    if x > 1:  # ถ้าเหลือ x > 1 แปลว่า x เป็น prime ตัวใหญ่
+    if x > 1:
         factors.append(x)
     return factors
 
 
-def FindGCD2(m, n):
+def FindGCD2(m, n, primes):
     """หาค่า GCD โดยใช้ sieve + prime factorization"""
-    factors_m = prime_factors_sieve(m)
-    factors_n = prime_factors_sieve(n)
+    factors_m = prime_factors_sieve(m, primes)
+    factors_n = prime_factors_sieve(n, primes)
 
     common = []
     for f in factors_m:
@@ -46,6 +46,37 @@ def FindGCD2(m, n):
     return gcd_val
 
 
-# ตัวอย่างการรัน
-m, n = 653184188245, 758331017965
-print("FindGCD2:", FindGCD2(m, n))
+# ----------------------------
+# อ่านไฟล์ numbers.txt
+# ----------------------------
+with open("lab1/testcase/Extra Case2 plot.txt", "r") as f:
+    lines = f.readlines()
+
+# วนคำนวณ GCD สำหรับแต่ละบรรทัด
+results = []
+i = 1
+for line in lines:
+    if(i==38):
+        break
+    line = line.strip()
+    if not line:
+        continue
+    m, n = map(int, line.split(","))
+
+    limit = int(max(m, n)**0.5) + 1
+    primes = sieve(limit)
+
+    gcd_val = FindGCD2(m, n, primes)
+    results.append(f"GCD({m}, {n}) = {gcd_val}")
+    i+=1
+    #print(i)
+
+# แสดงผล
+for r in results:
+    print(r)
+
+# ----------------------------
+# ถ้าอยากบันทึกผลลัพธ์ลงไฟล์ใหม่
+# ----------------------------
+with open("gcd_results.txt", "w") as f:
+    f.write("\n".join(results))
