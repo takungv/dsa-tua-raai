@@ -41,60 +41,51 @@ def kmp_search(text, pattern):
         if text[i] == pattern[j]:
             j += 1
         if j == m:
-            matches.append(i - m + 1)
+            matches.append(i - m + 1)  # 0-based index
             j = pi[j - 1]
     return pi, matches
 
 
 # ===== Read input =====
-with open("lab8/testcase/8.7.txt", "r", encoding="utf-8") as f:
-    lines = [line.strip() for line in f if line.strip()]
+with open("lab8/testcase/8.1.txt", "r", encoding="utf-8") as f:
+    lines = [line.strip() for line in f if line.strip()]  # skip empty lines
 
 chars = lines[0].split()
 n, m = map(int, lines[1].split())
 pattern = lines[2].split()
 text = lines[3].split()
 
-text_double = text + text  # วนรอบ 2 เท่า
-length = len(text)
+circle_text = text + text
+
+print(circle_text)
 
 # ===== Run KMP =====
-pi, matches_lr = kmp_search(text_double, pattern)
-matches_lr = [pos for pos in matches_lr if pos < length]  # จำกัดภายใน text เดิม
+pi, matches_lr = kmp_search(text, pattern)
 
 # RL (search reversed)
-rev_text = text_double[::-1]
+rev_text = text[::-1]
 _, matches_rev = kmp_search(rev_text, pattern)
-matches_rl_1based = sorted(length - i for i in matches_rev if i < length)
+matches_rl_1based = sorted(len(text) - i for i in matches_rev)
 
 # ===== Run Naive =====
-matches_naive_lr = naive_search(text_double, pattern)
-matches_naive_lr = [pos for pos in matches_naive_lr if pos < length]
-
+matches_naive_lr = naive_search(text, pattern)
 rev_naive = naive_search(rev_text, pattern)
-matches_naive_rl = sorted(length - i for i in rev_naive if i < length)
-
-# ===== Remove duplicates =====
-matches_lr = sorted(set(matches_lr))
-matches_rl_1based = sorted(set(matches_rl_1based))
-matches_naive_lr = sorted(set(matches_naive_lr))
-matches_naive_rl = sorted(set(matches_naive_rl))
+matches_naive_rl = sorted(len(text) - i for i in rev_naive)
 
 # ===== แสดงผล (KMP) =====
 print("=== KMP Algorithm ===")
-print(" ".join(map(str, pi)))
-print(len(matches_lr) + len(matches_rl_1based))
+print(" ".join(map(str, pi)))                    # prefix table
+print(len(matches_lr) + len(matches_rev))        # จำนวนทั้งหมดที่เจอ
 
 for pos in matches_lr:
-    print(pos + 1, "LR")
+    print(pos + 1, "LR")                         # ตำแหน่งเริ่ม (1-based)
 for pos in matches_rl_1based:
-    print(pos, "RL")
+    print(pos, "RL")                             # ตำแหน่งจบ (1-based)
 
 # ===== แสดงผล (Naive) =====
-print("\n=== Naive Algorithm ===")
-print(len(matches_naive_lr) + len(matches_naive_rl))
-
-for pos in matches_naive_lr:
-    print(pos + 1, "LR")
-for pos in matches_naive_rl:
-    print(pos, "RL")
+#print("\n=== Naive Algorithm ===")
+#print(len(matches_naive_lr) + len(matches_naive_rl))
+#for pos in matches_naive_lr:
+#    print(pos + 1, "LR")
+#for pos in matches_naive_rl:
+#    print(pos, "RL")
