@@ -19,14 +19,14 @@ def min_coin_change_dp(amount, coins):
             if j >= coin and dp[i][j - coin] + 1 < dp[i][j]:
                 dp[i][j] = dp[i][j - coin] + 1
 
-    # trace back หาชุดเหรียญที่ใช้
+    # trace back 
     res = []
     i, j = n, amount
     while j > 0 and i > 0:
         if dp[i][j] == dp[i-1][j]:
-            i -= 1  # ไม่ใช้เหรียญนี้
+            i -= 1  # !useeee
         else:
-            res.append(coins[i-1])  # ใช้เหรียญนี้
+            res.append(coins[i-1])  # usesssssssss
             j -= coins[i - 1]
 
     return dp[n][amount], res[::-1], dp
@@ -43,7 +43,7 @@ min_coins, path, table = min_coin_change_dp(amount, coins)
 
 
 
-# แสดงตาราง DP
+# DP Table
 print("\nDP Table (rows=coins used, cols=amount):")
 header = ["Amt"] + [str(j) for j in range(amount + 1)]
 print("  ".join(header))
