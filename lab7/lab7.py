@@ -1,34 +1,47 @@
-# -------------------------------
-# Divide & Conquer (O(n))
-# -------------------------------
+def bitrev_dc(arr):
+    if len(arr) <= 1:
+        return arr
+    
+    evens = [x for x in arr if x % 2 == 0]
+    odds  = [x for x in arr if x % 2 == 1]
+    
+    left  = bitrev_dc([x//2 for x in evens])
+    right = bitrev_dc([x//2 for x in odds])
+    
+    # นำกลับมาคูณ 2 ให้เหมือนเดิม
+    left  = [x*2 for x in left]
+    right = [x*2+1 for x in right]
+    
+    return left + right
 
-def divide_conquer(l, r, result):
-    if l > r:
-        return
-    mid = (l + r) // 2
-    result.append(mid)
-    divide_conquer(l, mid - 1, result)
-    divide_conquer(mid + 1, r, result)
+def bit_reversal_divide_conquer(n):
+    arr = list(range(n+1))
+    return bitrev_dc(arr)
 
-result = []
-divide_conquer(0, 5, result)
-print(*result)
+##############################################
 
-# -------------------------------
-# Sort by reversed bits (O(n log n))
-# -------------------------------
-def sort_by_key_method(n):
-    def rev_bits(x, k):
-        r = 0
-        for _ in range(k):
-            r = (r << 1) | (x & 1)
-            x >>= 1
-        return r
+def reverse_bits(x, k):
+    r = 0
+    for _ in range(k):
+        r = (r << 1) | (x & 1)
+        x >>= 1
+    return r
 
-    k = (n + 1).bit_length()
-    arr = list(range(n + 1))
-    arr.sort(key=lambda i: rev_bits(i, k))
-    return arr
+def bit_reversal(n):
+    # หา k ให้ 2^k > n
+    k = 1
+    while (1 << k) <= n:
+        k += 1
 
+    result = []
+    for i in range(1 << k):
+        r = reverse_bits(i, k)
+        if r <= n:
+            result.append(r)
+    return result
 
-#print(*(sort_by_key_method(200)))
+n = 5
+print("==========DC==========")
+print(bit_reversal_divide_conquer(n))
+print("====================")
+print(bit_reversal(n))

@@ -10,7 +10,7 @@ def dfs(start, graph, visited):
                 visited[nxt] = True
                 stack.append(nxt)
 
-with open("lab9/testcase/9.1.txt","r") as f:
+with open("lab9/testcase/Extra9.5.txt","r") as f:
     data = f.read().strip().split()
 
 it = iter(data)
